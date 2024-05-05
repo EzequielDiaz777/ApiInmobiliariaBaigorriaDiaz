@@ -21,6 +21,7 @@ namespace InmobiliariaBaigorriaDiaz.Models
 		[Display(Name = "Teléfono")]
         public string? Telefono { get; set; }
 
+
         [Required, EmailAddress]
         public string Email { get; set; } = "";
 
@@ -29,7 +30,7 @@ namespace InmobiliariaBaigorriaDiaz.Models
 
         [Required]
         public bool Estado { get; set; }
-        
+
         public override string ToString()
         {
             return $"{Apellido} {Nombre}";
