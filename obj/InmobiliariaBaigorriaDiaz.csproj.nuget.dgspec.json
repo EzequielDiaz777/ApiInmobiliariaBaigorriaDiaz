@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Guardar\\Facultad\\4 - Tecnicatura en Desarrollo de Software\\Laboratorio III\\InmobiliariaBaigorriaDiaz\\InmobiliariaBaigorriaDiaz.csproj": {}
+    "e:\\Guardar\\Facultad\\4 - Tecnicatura en Desarrollo de Software\\Laboratorio III\\InmobiliariaBaigorriaDiaz\\InmobiliariaBaigorriaDiaz.csproj": {}
   },
   "projects": {
-    "E:\\Guardar\\Facultad\\4 - Tecnicatura en Desarrollo de Software\\Laboratorio III\\InmobiliariaBaigorriaDiaz\\InmobiliariaBaigorriaDiaz.csproj": {
+    "e:\\Guardar\\Facultad\\4 - Tecnicatura en Desarrollo de Software\\Laboratorio III\\InmobiliariaBaigorriaDiaz\\InmobiliariaBaigorriaDiaz.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Guardar\\Facultad\\4 - Tecnicatura en Desarrollo de Software\\Laboratorio III\\InmobiliariaBaigorriaDiaz\\InmobiliariaBaigorriaDiaz.csproj",
+        "projectUniqueName": "e:\\Guardar\\Facultad\\4 - Tecnicatura en Desarrollo de Software\\Laboratorio III\\InmobiliariaBaigorriaDiaz\\InmobiliariaBaigorriaDiaz.csproj",
         "projectName": "InmobiliariaBaigorriaDiaz",
-        "projectPath": "E:\\Guardar\\Facultad\\4 - Tecnicatura en Desarrollo de Software\\Laboratorio III\\InmobiliariaBaigorriaDiaz\\InmobiliariaBaigorriaDiaz.csproj",
+        "projectPath": "e:\\Guardar\\Facultad\\4 - Tecnicatura en Desarrollo de Software\\Laboratorio III\\InmobiliariaBaigorriaDiaz\\InmobiliariaBaigorriaDiaz.csproj",
         "packagesPath": "C:\\Users\\long_\\.nuget\\packages\\",
-        "outputPath": "E:\\Guardar\\Facultad\\4 - Tecnicatura en Desarrollo de Software\\Laboratorio III\\InmobiliariaBaigorriaDiaz\\obj\\",
+        "outputPath": "e:\\Guardar\\Facultad\\4 - Tecnicatura en Desarrollo de Software\\Laboratorio III\\InmobiliariaBaigorriaDiaz\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\long_\\AppData\\Roaming\\NuGet\\NuGet.Config"
