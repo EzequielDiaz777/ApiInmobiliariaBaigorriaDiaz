@@ -21,10 +21,10 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 		public PropietariosController(DataContext contexto, IConfiguration config, IWebHostEnvironment env)
 		{
 			this.contexto = contexto;
-			this.config = config;
+			this.config = config; 
 			environment = env;
 		}
-		// GET: api/<controller>
+		// GET: <controller>
 		[HttpGet]
 		public async Task<ActionResult<Propietario>> Get()
 		{
@@ -48,13 +48,13 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		// GET api/<controller>/5
+		// GET <controller>/5
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(int id)
 		{
 			try
 			{
-				var entidad = await contexto.Propietarios.SingleOrDefaultAsync(x => x.IdPropietario == id);
+				var entidad = await contexto.Propietarios.SingleOrDefaultAsync(x => x.Id == id);
 				return entidad != null ? Ok(entidad) : NotFound();
 			}
 			catch (Exception ex)
@@ -63,7 +63,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		// GET api/<controller>/token
+		// GET <controller>/token
 		[HttpGet("token")]
 		public IActionResult Token()
 		{
@@ -76,11 +76,11 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 
 			Random rand = new Random(Environment.TickCount);
 			string randomChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
-			string nuevaClave = "";
+			string nuevaPassword = "";
 
 			for (int i = 0; i < 8; i++)
 			{
-				nuevaClave += randomChars[rand.Next(0, randomChars.Length)];
+				nuevaPassword += randomChars[rand.Next(0, randomChars.Length)];
 			}
 
 			// Mueve el return fuera del bucle
@@ -89,7 +89,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 
 
 
-		// GET api/<controller>/email
+		// GET <controller>/email
 		[HttpPost("email")]
 		[AllowAnonymous]
 		public async Task<IActionResult> GetByEmail([FromForm] string email)
@@ -109,7 +109,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		// GET api/<controller>/GetAll
+		// GET <controller>/GetAll
 		[HttpGet("GetAll")]
 		public async Task<IActionResult> GetAll()
 		{
@@ -123,7 +123,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		// POST api/<controller>/login
+		// POST <controller>/login
 		[HttpPost("login")]
 		[AllowAnonymous]
 		public async Task<IActionResult> Login([FromForm] LoginView loginView)
@@ -137,9 +137,9 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 					iterationCount: 1000,
 					numBytesRequested: 256 / 8));
 				var p = await contexto.Propietarios.FirstOrDefaultAsync(x => x.Email == loginView.Usuario);
-				if (p == null || p.Clave != hashed)
+				if (p == null || p.Password != hashed)
 				{
-					return BadRequest("Nombre de usuario o clave incorrecta");
+					return BadRequest("Nombre de usuario o Password incorrecta");
 				}
 				else
 				{
@@ -169,7 +169,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		// POST api/<controller>
+		// POST <controller>
 		[HttpPost]
 		public async Task<IActionResult> Post([FromForm] Propietario entidad)
 		{
@@ -179,7 +179,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 				{
 					await contexto.Propietarios.AddAsync(entidad);
 					contexto.SaveChanges();
-					return CreatedAtAction(nameof(Get), new { id = entidad.IdPropietario }, entidad);
+					return CreatedAtAction(nameof(Get), new { id = entidad.Id }, entidad);
 				}
 				return BadRequest();
 			}
@@ -189,7 +189,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		// PUT api/<controller>/5
+		// PUT <controller>/5
 		[HttpPut("{id}")]
 		public async Task<IActionResult> Put(int id, [FromForm] Propietario entidad)
 		{
@@ -197,16 +197,16 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			{
 				if (ModelState.IsValid)
 				{
-					entidad.IdPropietario = id;
+					entidad.Id = id;
 					Propietario original = await contexto.Propietarios.FindAsync(id);
-					if (String.IsNullOrEmpty(entidad.Clave))
+					if (String.IsNullOrEmpty(entidad.Password))
 					{
-						entidad.Clave = original.Clave;
+						entidad.Password = original.Password;
 					}
 					else
 					{
-						entidad.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-							password: entidad.Clave,
+						entidad.Password = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+							password: entidad.Password,
 							salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
 							prf: KeyDerivationPrf.HMACSHA1,
 							iterationCount: 1000,
@@ -224,7 +224,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		// DELETE api/<controller>/5
+		// DELETE <controller>/5
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(int id)
 		{
@@ -262,7 +262,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		// GET: api/Propietarios/test/5
+		// GET: Propietarios/test/5
 		[HttpGet("test/{codigo}")]
 		[AllowAnonymous]
 		public IActionResult Code(int codigo)

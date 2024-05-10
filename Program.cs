@@ -39,12 +39,12 @@ builder.Services.AddAuthentication()
             }
         };
     });
-var serverVersion = ServerVersion.AutoDetect("Server=localhost;User=root;Password=;Database=inmobiliariabaigorriadiaz;SslMode=none");
+var serverVersion = ServerVersion.AutoDetect("Server=localhost;User=root;Password=;Database=apiInmobiliaria;SslMode=none");
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(
             dbContextOptions => dbContextOptions
-                .UseMySql("Server=localhost;User=root;Password=;Database=inmobiliariabaigorriadiaz;SslMode=none", serverVersion)
+                .UseMySql("Server=localhost;User=root;Password=;Database=apiInmobiliaria;SslMode=none", serverVersion)
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
