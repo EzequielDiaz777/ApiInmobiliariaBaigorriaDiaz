@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Inmobiliaria_.Net_Core.Api
 {
 	[Route("[controller]")]
-	//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class InmueblesController : Controller
 	{
 		private readonly DataContext contexto;

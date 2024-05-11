@@ -10,8 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace InmobiliariaBaigorriaDiaz.Controllers
 {
-	[ApiController]
 	[Route("[controller]")]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class PropietariosController : ControllerBase 
 	{
 		private readonly DataContext contexto;
@@ -30,16 +30,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 		{
 			try
 			{
-				/*contexto.Inmuebles
-					.Include(x => x.Duenio)
-					.Where(x => x.Duenio.Nombre == "")//.ToList() => lista de inmuebles
-					.Select(x => x.Duenio)
-					.ToList();//lista de propietarios*/
 				var usuario = User.Identity.Name;
-				/*contexto.Contratos.Include(x => x.Inquilino).Include(x => x.Inmueble).ThenInclude(x => x.Duenio)
-					.Where(c => c.Inmueble.Duenio.Email....);*/
-				/*var res = contexto.Propietarios.Select(x => new { x.Nombre, x.Apellido, x.Email })
-					.SingleOrDefault(x => x.Email == usuario);*/
 				return await contexto.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
 			}
 			catch (Exception ex)
@@ -157,7 +148,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 						issuer: config["TokenAuthentication:Issuer"],
 						audience: config["TokenAuthentication:Audience"],
 						claims: claims,
-						expires: DateTime.Now.AddMinutes(60),
+						expires: DateTime.Now.AddMinutes(60000),
 						signingCredentials: credenciales
 					);
 					return Ok(new JwtSecurityTokenHandler().WriteToken(token));
@@ -170,7 +161,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 		}
 
 		// POST <controller>
-		[HttpPost]
+		/*[HttpPost]
 		public async Task<IActionResult> Post([FromForm] Propietario entidad)
 		{
 			try
@@ -187,21 +178,22 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			{
 				return BadRequest(ex.Message);
 			}
-		}
+		}*/
 
-		// PUT <controller>/5
-		[HttpPut("{id}")]
-		public async Task<IActionResult> Put(int id, [FromForm] Propietario entidad)
+		// PUT <controller>
+		[HttpPut]
+		public async Task<IActionResult> Put([FromForm] Propietario entidad)
 		{
 			try
 			{
 				if (ModelState.IsValid)
 				{
-					entidad.Id = id;
-					Propietario original = await contexto.Propietarios.FindAsync(id);
+					var propietario = await contexto.Propietarios.AsNoTracking().FirstOrDefaultAsync(x => x.Email == entidad.Email);
+					entidad.Id = propietario.Id;
+					//Propietario original = await contexto.Propietarios.AsNoTracking().FirstAsync(x => x.Id == id);
 					if (String.IsNullOrEmpty(entidad.Password))
 					{
-						entidad.Password = original.Password;
+						entidad.Password = propietario.Password;
 					}
 					else
 					{

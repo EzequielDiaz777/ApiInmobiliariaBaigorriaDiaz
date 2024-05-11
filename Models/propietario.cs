@@ -8,19 +8,16 @@ namespace InmobiliariaBaigorriaDiaz.Models
         [Display(Name = "ID del propietario")]
         public int Id { get; set; }
 
-        [Required]
         public string Nombre { get; set; } = "";
 
-        [Required]
         public string Apellido { get; set; } = "";
 
-		[Required]
 		public string DNI { get; set; } = "";
 
 		[Display(Name = "Teléfono")]
         public string? Telefono { get; set; }
 
-        [Required, EmailAddress]
+        [EmailAddress]
         public string Email { get; set; } = "";
 
 		[Required(ErrorMessage = "La clave es obligatoria")]
