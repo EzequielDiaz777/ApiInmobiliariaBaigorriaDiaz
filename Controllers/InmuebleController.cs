@@ -49,7 +49,7 @@ namespace Inmobiliaria_.Net_Core.Api
 
 		// POST api/<controller>
 		[HttpPost]
-		public async Task<IActionResult> Post([FromBody] Inmueble entidad)
+		public async Task<IActionResult> Post([FromForm] Inmueble entidad)
 		{
 			try
 			{

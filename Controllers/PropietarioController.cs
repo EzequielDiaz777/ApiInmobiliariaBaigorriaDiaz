@@ -39,21 +39,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		// GET <controller>/5
-		[HttpGet("{id}")]
-		public async Task<IActionResult> Get(int id)
-		{
-			try
-			{
-				var entidad = await contexto.Propietarios.SingleOrDefaultAsync(x => x.Id == id);
-				return entidad != null ? Ok(entidad) : NotFound();
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}
-
 		// GET <controller>/token
 		[HttpGet("token")]
 		public IActionResult Token()
@@ -78,8 +63,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			return Ok(perfil);
 		}
 
-
-
 		// GET <controller>/email
 		[HttpPost("email")]
 		[AllowAnonymous]
@@ -93,20 +76,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 				//Dominio sirve para armar el enlace, en local será la ip y en producción será el dominio www...
 				var dominio = environment.IsDevelopment() ? HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString() : "www.misitio.com";
 				return entidad != null ? Ok(entidad) : NotFound();
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}
-
-		// GET <controller>/GetAll
-		[HttpGet("GetAll")]
-		public async Task<IActionResult> GetAll()
-		{
-			try
-			{
-				return Ok(await contexto.Propietarios.ToListAsync());
 			}
 			catch (Exception ex)
 			{
@@ -159,26 +128,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-
-		// POST <controller>
-		/*[HttpPost]
-		public async Task<IActionResult> Post([FromForm] Propietario entidad)
-		{
-			try
-			{
-				if (ModelState.IsValid)
-				{
-					await contexto.Propietarios.AddAsync(entidad);
-					contexto.SaveChanges();
-					return CreatedAtAction(nameof(Get), new { id = entidad.Id }, entidad);
-				}
-				return BadRequest();
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}*/
 
 		// PUT <controller>
 		[HttpPut]
