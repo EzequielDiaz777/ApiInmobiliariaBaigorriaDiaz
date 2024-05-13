@@ -12,14 +12,16 @@ namespace InmobiliariaBaigorriaDiaz.Models
 		public int PropietarioId { get; set; }
 
 		[Required]
+		public int TipoId { get; set; }
+
+		[Required]
+		public int UsoId { get; set; }
+
+		[Required]
 		public string Direccion { get; set; } = "";
 
 		[Required]
 		public int Ambientes { get; set; }
-
-		public string Tipo { get; set; } = "";
-
-		public string Uso { get; set; } = "";
 
 		public decimal Precio {get; set;}
 
@@ -27,5 +29,11 @@ namespace InmobiliariaBaigorriaDiaz.Models
 		
 		[ForeignKey(nameof(PropietarioId))]
 		public Propietario? Duenio { get; set; }
+
+		[ForeignKey(nameof(TipoId))]
+		public Tipo? Tipo {get;set;}
+
+		[ForeignKey(nameof(UsoId))]
+		public Uso? Uso {get;set;}
 	}
 }

@@ -1,12 +1,8 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using InmobiliariaBaigorriaDiaz.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace InmobiliariaBaigorriaDiaz.Controllers
 {
@@ -33,7 +29,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 						.ThenInclude(i => i.Duenio) // Incluye la propiedad de navegación Duenio dentro de Inmueble
 					.Where(c => c.Inmueble.Duenio.Email == usuario)
 					.ToListAsync();
-
 				return Ok(contratos);
 			}
 			catch (Exception ex)

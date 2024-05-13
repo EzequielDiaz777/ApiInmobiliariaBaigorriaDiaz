@@ -39,7 +39,10 @@ namespace Inmobiliaria_.Net_Core.Api
 			try
 			{
 				var usuario = User.Identity.Name;
-				return Ok(contexto.Inmuebles.Include(e => e.Duenio).Where(e => e.Duenio.Email == usuario).Single(e => e.Id == id));
+				Inmueble inmueble = contexto.Inmuebles.Include(e => e.Duenio).Where(e => e.Duenio.Email == usuario).Single(e => e.Id == id);
+				inmueble.Tipo = contexto.Tipodeinmueble.Single(e => e.Id == inmueble.TipoId);
+				inmueble.Uso = contexto.Usodeinmueble.Single(e => e.Id == inmueble.UsoId);
+				return Ok(inmueble);
 			}
 			catch (Exception ex)
 			{
@@ -68,37 +71,21 @@ namespace Inmobiliaria_.Net_Core.Api
 			}
 		}
 
-		// PUT api/<controller>/5
-		[HttpPut("{id}")]
-		public async Task<IActionResult> Put(int id, Inmueble entidad)
-		{
-			try
-			{
-				if (ModelState.IsValid && contexto.Inmuebles.AsNoTracking().Include(e => e.Duenio).FirstOrDefault(e => e.Id == id && e.Duenio.Email == User.Identity.Name) != null)
-				{
-					entidad.Id = id;
-					contexto.Inmuebles.Update(entidad);
-					contexto.SaveChanges();
-					return Ok(entidad);
-				}
-				return BadRequest();
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}
-
 		// DELETE api/<controller>/5
-		[HttpDelete("BajaLogica/{id}")]
-		public async Task<IActionResult> BajaLogica(int id)
+		[HttpPut("CambioLogico/{id}")]
+		public async Task<IActionResult> CambioLogico(int id)
 		{
 			try
 			{
-				var entidad = contexto.Inmuebles.Include(e => e.Duenio).FirstOrDefault(e => e.Id == id && e.Duenio.Email == "mluzza@gmail.com");
+				var usuario = User.Identity.Name;
+				var entidad = contexto.Inmuebles.Include(e => e.Duenio).FirstOrDefault(e => e.Id == id && e.Duenio.Email == usuario);
 				if (entidad != null)
 				{
-					entidad.Estado = false;
+					if(entidad.Estado){
+						entidad.Estado = false;
+					} else {
+						entidad.Estado = true;
+					}
 					contexto.Inmuebles.Update(entidad);
 					contexto.SaveChanges();
 					return Ok();
