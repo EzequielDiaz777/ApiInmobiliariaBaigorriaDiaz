@@ -117,7 +117,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 						issuer: config["TokenAuthentication:Issuer"],
 						audience: config["TokenAuthentication:Audience"],
 						claims: claims,
-						expires: DateTime.Now.AddMinutes(60000),
+						expires: DateTime.Now.AddHours(60000),
 						signingCredentials: credenciales
 					);
 					return Ok(new JwtSecurityTokenHandler().WriteToken(token));
