@@ -52,7 +52,7 @@ namespace Inmobiliaria_.Net_Core.Api
 
 		// POST api/<controller>
 		[HttpPost]
-		public async Task<IActionResult> Post([FromForm] Inmueble entidad)
+		public async Task<IActionResult> Post([FromBody] Inmueble entidad)
 		{
 			try
 			{
@@ -72,7 +72,7 @@ namespace Inmobiliaria_.Net_Core.Api
 		}
 
 		// DELETE api/<controller>/5
-		[HttpPut("CambioLogico/{id}")]
+		[HttpPut("cambiologico/{id}")]
 		public async Task<IActionResult> CambioLogico(int id)
 		{
 			try

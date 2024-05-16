@@ -31,7 +31,7 @@ builder.Services.AddAuthentication()
                 if (!string.IsNullOrEmpty(accessToken) &&
                     (path.StartsWithSegments("/chatsegurohub") ||
                     path.StartsWithSegments("/propietarios/reset") ||
-                    path.StartsWithSegments("/propietarios/token")))
+                    path.StartsWithSegments("/propietarios/cambiarpassword")))
                 {//reemplazar las urls por las necesarias ruta ⬆
                     context.Token = accessToken;
                 }
