@@ -24,11 +24,9 @@ namespace InmobiliariaBaigorriaDiaz.Models
 		public DateOnly FechaFin { get; set; }
 
 		[ForeignKey(nameof(InquilinoId))]
-		[NotMapped]
 		public Inquilino? Inquilino { get; set; }
 
 		[ForeignKey(nameof(InmuebleId))]
-		[NotMapped]
 		public Inmueble? Inmueble { get; set; }
 	}
 }

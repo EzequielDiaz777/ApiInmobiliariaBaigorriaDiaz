@@ -25,8 +25,13 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			{
 				var usuario = User.Identity.Name;
 				var contratos = await contexto.Contratos
-					.Include(c => c.Inmueble) // Incluye la propiedad de navegación Inmueble
-						.ThenInclude(i => i.Duenio) // Incluye la propiedad de navegación Duenio dentro de Inmueble
+					.Include(c => c.Inmueble)
+						.ThenInclude(i => i.Duenio)
+					.Include(c => c.Inmueble)
+						.ThenInclude(i => i.Uso)
+					.Include(c => c.Inmueble)
+						.ThenInclude(i => i.Tipo)
+					.Include(i => i.Inquilino)
 					.Where(c => c.Inmueble.Duenio.Email == usuario)
 					.ToListAsync();
 				return Ok(contratos);

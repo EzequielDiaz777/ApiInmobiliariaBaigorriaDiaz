@@ -20,7 +20,6 @@ namespace InmobiliariaBaigorriaDiaz.Models
         [EmailAddress]
         public string Email { get; set; } = "";
 
-		[Required(ErrorMessage = "La clave es obligatoria")]
 		public string Password { get; set; } = "";
 
         public override string ToString()
