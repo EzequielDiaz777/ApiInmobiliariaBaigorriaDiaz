@@ -17,7 +17,6 @@ namespace Inmobiliaria_.Net_Core.Api
 			this.contexto = contexto;
 		}
 
-		// GET: api/<controller>
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
@@ -32,7 +31,6 @@ namespace Inmobiliaria_.Net_Core.Api
 			}
 		}
 
-		// GET api/<controller>/5
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(int id)
 		{
@@ -50,7 +48,6 @@ namespace Inmobiliaria_.Net_Core.Api
 			}
 		}
 
-		// POST api/<controller>
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] Inmueble entidad)
 		{
@@ -71,7 +68,6 @@ namespace Inmobiliaria_.Net_Core.Api
 			}
 		}
 
-		// DELETE api/<controller>/5
 		[HttpPut("cambiologico/{id}")]
 		public async Task<IActionResult> CambioLogico(int id)
 		{
@@ -88,7 +84,7 @@ namespace Inmobiliaria_.Net_Core.Api
 					}
 					contexto.Inmuebles.Update(entidad);
 					contexto.SaveChanges();
-					return Ok();
+					return Ok("Cambio efectuado con exito");
 				}
 				return BadRequest();
 			}

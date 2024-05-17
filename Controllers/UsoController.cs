@@ -8,17 +8,15 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 {
 	[Route("[controller]")]
 	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-	public class UsoController : ControllerBase
+	public class UsosController : ControllerBase
 	{
 		private readonly DataContext contexto;
-		private readonly IConfiguration config;
 
-		public UsoController(DataContext contexto, IConfiguration config)
+		public UsosController(DataContext contexto)
 		{
 			this.contexto = contexto;
-			this.config = config;
 		}
-		// GET: <controller>
+		
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<Uso>>> Get()
 		{

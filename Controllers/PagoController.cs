@@ -18,7 +18,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			this.contexto = contexto;
 		}
 
-		// GET: /Pagos?contratoId=1
 		[HttpGet("{id}")]
         public async Task<ActionResult<Pago>> Get(int id)
         {

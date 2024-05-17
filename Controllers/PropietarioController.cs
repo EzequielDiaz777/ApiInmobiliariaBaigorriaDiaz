@@ -27,7 +27,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			this.contexto = contexto;
 			this.config = config;
 		}
-		// GET: <controller>
+		
 		[HttpGet]
 		public async Task<ActionResult<Propietario>> Get()
 		{
@@ -42,7 +42,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		// POST <controller>/login
 		[HttpPost("login")]
 		[AllowAnonymous]
 		public async Task<IActionResult> Login([FromForm] LoginView loginView)
@@ -71,7 +70,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 						new Claim("FullName", p.Nombre + " " + p.Apellido),
 						new Claim(ClaimTypes.Role, "Administrador"),
 					};
-
 					var token = new JwtSecurityToken(
 						issuer: config["TokenAuthentication:Issuer"],
 						audience: config["TokenAuthentication:Audience"],
@@ -88,24 +86,18 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-
 		private string GetLocalIpAddress()
 		{
 			string localIp = null;
-
-			// Obtiene todas las direcciones IP del host local
 			var host = Dns.GetHostEntry(Dns.GetHostName());
-
 			foreach (var ip in host.AddressList)
 			{
-				// Selecciona la dirección IPv4 no loopback
 				if (ip.AddressFamily == AddressFamily.InterNetwork)
 				{
 					localIp = ip.ToString();
 					break;
 				}
 			}
-
 			return localIp;
 		}
 
@@ -120,8 +112,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 				{
 					return NotFound("No se encontró ningún usuario con esta dirección de correo electrónico.");
 				}
-
-				// Generar y guardar un token de restablecimiento de contraseña
 				var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(config["TokenAuthentication:SecretKey"]));
 				var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 				var claims = new List<Claim>
@@ -130,7 +120,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 					new Claim("FullName", $"{propietario.Nombre} {propietario.Apellido}"),
 					new Claim(ClaimTypes.Role, "Usuario"),
 				};
-
 				var token = new JwtSecurityToken(
 					issuer: config["TokenAuthentication:Issuer"],
 					audience: config["TokenAuthentication:Audience"],
@@ -138,7 +127,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 					expires: DateTime.Now.AddHours(5),
 					signingCredentials: credenciales
 				);
-
 				var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 				var dominio = HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
 				var resetLink = Url.Action("CambiarPassword", "Propietarios");
@@ -154,14 +142,12 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 							<p>Por favor, haz clic en el siguiente enlace para crear una nueva contraseña:</p>
 						   <a href='{rutaCompleta}?access_token={tokenString}'>{rutaCompleta}?access_token={tokenString}</a>"
 				};
-
 				using var client = new SmtpClient();
 				client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 				await client.ConnectAsync("sandbox.smtp.mailtrap.io", 587, MailKit.Security.SecureSocketOptions.StartTls);
 				await client.AuthenticateAsync(config["SMTPUser"], config["SMTPPass"]);
 				await client.SendAsync(message);
 				await client.DisconnectAsync(true);
-
 				return Ok("Se ha enviado el enlace de restablecimiento de contraseña correctamente.");
 			}
 			catch (Exception ex)
@@ -211,7 +197,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 							   $"<p>Has cambiado tu contraseña de forma correcta. " +
 							   $"Tu nueva contraseña es la siguiente: {nuevaClave}</p>"
 					};
-
 					using var client = new SmtpClient();
 					client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 					await client.ConnectAsync("sandbox.smtp.mailtrap.io", 587, MailKit.Security.SecureSocketOptions.StartTls);
@@ -228,12 +213,11 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		// PUT <controller>
 		[HttpPut]
 		public async Task<IActionResult> Put([FromBody] Propietario entidad)
 		{
 			try
-			{ //hacer validación 
+			{
 				if (ModelState.IsValid)
 				{
 					var propietario = await contexto.Propietarios.AsNoTracking().FirstOrDefaultAsync(x => x.Email == entidad.Email);

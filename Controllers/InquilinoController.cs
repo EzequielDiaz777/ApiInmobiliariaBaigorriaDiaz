@@ -1,12 +1,6 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using InmobiliariaBaigorriaDiaz.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace InmobiliariaBaigorriaDiaz.Controllers
 {
@@ -15,14 +9,10 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 	public class InquilinosController : ControllerBase
 	{
 		private readonly DataContext contexto;
-		private readonly IConfiguration config;
-		private readonly IWebHostEnvironment environment;
 
-		public InquilinosController(DataContext contexto, IConfiguration config, IWebHostEnvironment env)
+		public InquilinosController(DataContext contexto)
 		{
 			this.contexto = contexto;
-			this.config = config;
-			environment = env;
 		}
 
 		[HttpGet("{id}")]
