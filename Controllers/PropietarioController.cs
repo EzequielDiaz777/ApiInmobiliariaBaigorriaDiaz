@@ -124,7 +124,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 					issuer: config["TokenAuthentication:Issuer"],
 					audience: config["TokenAuthentication:Audience"],
 					claims: claims,
-					expires: DateTime.Now.AddHours(5),
+					expires: DateTime.Now.AddMinutes(5),
 					signingCredentials: credenciales
 				);
 				var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
@@ -204,7 +204,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 					await client.SendAsync(message);
 					await client.DisconnectAsync(true);
 
-					return Ok("Se ha enviado el restablecido la contraseña correctamente.");
+					return Ok("Se ha restablecido la contraseña correctamente.");
 				}
 			}
 			catch (Exception ex)

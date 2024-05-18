@@ -33,11 +33,11 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 		}
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<Inquilino>> Get(int id)
+		public async Task<ActionResult<Uso>> Get(int id)
 		{
 			try
 			{
-				var entidad = await contexto.Tipodeinmueble.SingleOrDefaultAsync(t => t.Id == id);
+				var entidad = await contexto.Usodeinmueble.SingleOrDefaultAsync(u => u.Id == id);
 				return entidad != null ? Ok(entidad) : NotFound();
 			}
 			catch (Exception ex)

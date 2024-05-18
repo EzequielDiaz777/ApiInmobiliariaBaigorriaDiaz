@@ -34,7 +34,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 		}
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<Inquilino>> Get(int id)
+		public async Task<ActionResult<Tipo>> Get(int id)
 		{
 			try
 			{
