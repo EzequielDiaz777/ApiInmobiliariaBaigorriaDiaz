@@ -221,31 +221,39 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 				if (ModelState.IsValid)
 				{
 					var propietario = await contexto.Propietarios.AsNoTracking().FirstOrDefaultAsync(x => x.Email == entidad.Email);
+					if (propietario == null)
+					{
+						return NotFound("Propietario no encontrado");
+					}
+
 					entidad.Id = propietario.Id;
-					if (String.IsNullOrEmpty(entidad.Password))
+					if (string.IsNullOrEmpty(entidad.Password))
 					{
 						entidad.Password = propietario.Password;
 					}
 					else
 					{
 						string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-						password: entidad.Password,
-						salt: Encoding.ASCII.GetBytes(config["Salt"]),
-						prf: KeyDerivationPrf.HMACSHA1,
-						iterationCount: 1000,
-						numBytesRequested: 256 / 8));
+							password: entidad.Password,
+							salt: Encoding.ASCII.GetBytes(config["Salt"]),
+							prf: KeyDerivationPrf.HMACSHA1,
+							iterationCount: 1000,
+							numBytesRequested: 256 / 8));
 						entidad.Password = hashed;
 					}
 					contexto.Propietarios.Update(entidad);
 					await contexto.SaveChangesAsync();
 					return Ok(entidad);
 				}
-				return BadRequest();
+
+				return BadRequest("Modelo inválido");
 			}
 			catch (Exception ex)
 			{
-				return BadRequest(ex.Message);
+				// Agregar más detalles del error en el registro para depuración
+				return BadRequest($"Error: {ex.Message}");
 			}
 		}
+
 	}
 }

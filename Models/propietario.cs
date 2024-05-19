@@ -17,7 +17,6 @@ namespace InmobiliariaBaigorriaDiaz.Models
 		[Display(Name = "Teléfono")]
         public string? Telefono { get; set; }
 
-        [EmailAddress]
         public string Email { get; set; } = "";
 
 		public string Password { get; set; } = "";

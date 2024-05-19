@@ -47,12 +47,14 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
         {
             try
             {
+				var fechaActual = DateOnly.Parse(DateTime.Now.ToString("yyyy-MM-dd"));
                 var usuario = User.Identity.Name;
                 var contrato = await contexto.Contratos
                     .Include(c => c.Inmueble)
                         .ThenInclude(i => i.Duenio)
-					.Include(c => c.Inquilino)
-                    .FirstOrDefaultAsync(c => c.Id == id && c.Inmueble.Duenio.Email == usuario);
+					.Include(c => c.Inquilino).
+					Where(c => c.FechaInicio <= fechaActual && c.FechaFin >= fechaActual)
+                    .FirstOrDefaultAsync(c => c.InmuebleId == id && c.Inmueble.Duenio.Email == usuario);
 
                 if (contrato == null)
                 {
