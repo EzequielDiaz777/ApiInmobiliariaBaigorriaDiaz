@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-05-2024 a las 00:15:58
+-- Tiempo de generación: 20-05-2024 a las 21:42:02
 -- Versión del servidor: 10.4.18-MariaDB
 -- Versión de PHP: 8.0.5
 
@@ -52,6 +52,7 @@ CREATE TABLE `inmuebles` (
   `TipoId` int(11) NOT NULL,
   `UsoId` int(11) NOT NULL,
   `Precio` decimal(10,2) NOT NULL,
+  `ImagenUrl` varchar(2000) DEFAULT NULL,
   `Estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -105,8 +106,10 @@ CREATE TABLE `propietarios` (
 --
 
 INSERT INTO `propietarios` (`Id`, `DNI`, `Apellido`, `Nombre`, `Telefono`, `Email`, `Password`) VALUES
-(1, '12345678', 'Bonilla Luzza', 'Mariano Gabriel', '1212212', 'mluzza@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20='),
-(2, '27013989', 'Baigorria', 'Monica Patricia', '2657123456', 'patobaigorria@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20=');
+(1, '12345678', 'Luzza', 'Mariano', '121221224', 'mluzza@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20='),
+(2, '27013989', 'Baigorria', 'Monica Patricia', '2657123455', 'patobaigorria@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20='),
+(6, '34229421', 'Diaz', 'Jorge Ezequiel', '1132185231', 'diazezequiel777@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20='),
+(7, '37716731', 'Cruceño', 'Federico Ivan', '2657312733', 'a', '3NhEe7xWmOI/rcoD1E87QOXvp/dxtXzdcKYcAKt41tM=');
 
 -- --------------------------------------------------------
 
@@ -232,7 +235,7 @@ ALTER TABLE `pagos`
 -- AUTO_INCREMENT de la tabla `propietarios`
 --
 ALTER TABLE `propietarios`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `tipodeinmueble`

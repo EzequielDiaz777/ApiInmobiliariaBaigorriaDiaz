@@ -26,7 +26,10 @@ namespace InmobiliariaBaigorriaDiaz.Models
 		public decimal Precio {get; set;}
 
 		public bool Estado {get; set;}
-		
+		public string? ImagenUrl { get; set; }
+		[NotMapped]
+		public IFormFile Imagen { get; set;}
+
 		[ForeignKey(nameof(PropietarioId))]
 		public Propietario? Duenio { get; set; }
 

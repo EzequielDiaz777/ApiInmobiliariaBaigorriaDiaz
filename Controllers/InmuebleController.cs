@@ -3,18 +3,22 @@ using InmobiliariaBaigorriaDiaz.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
-namespace Inmobiliaria_.Net_Core.Api
+namespace InmobiliariaBaigorriaDiaz.Controllers
 {
 	[Route("[controller]")]
 	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class InmueblesController : Controller
 	{
 		private readonly DataContext contexto;
+		private readonly IWebHostEnvironment environment;
 
-		public InmueblesController(DataContext contexto)
+		public InmueblesController(DataContext contexto, IWebHostEnvironment environment)
 		{
 			this.contexto = contexto;
+			this.environment = environment;
 		}
 
 		[HttpGet]
@@ -23,7 +27,11 @@ namespace Inmobiliaria_.Net_Core.Api
 			try
 			{
 				var usuario = User.Identity.Name;
-				return Ok(contexto.Inmuebles.Include(e => e.Duenio).Where(e => e.Duenio.Email == usuario));
+				return Ok(contexto.Inmuebles
+				.Include(e => e.Duenio)
+				.Include(t => t.Tipo)
+				.Include(u => u.Uso)
+				.Where(e => e.Duenio.Email == usuario));
 			}
 			catch (Exception ex)
 			{
@@ -37,10 +45,12 @@ namespace Inmobiliaria_.Net_Core.Api
 			try
 			{
 				var usuario = User.Identity.Name;
-				Inmueble inmueble = contexto.Inmuebles.Include(e => e.Duenio).Where(e => e.Duenio.Email == usuario).Single(e => e.Id == id);
-				inmueble.Tipo = contexto.Tipodeinmueble.Single(e => e.Id == inmueble.TipoId);
-				inmueble.Uso = contexto.Usodeinmueble.Single(e => e.Id == inmueble.UsoId);
-				return Ok(inmueble);
+				return Ok(contexto.Inmuebles
+					.Include(e => e.Duenio)
+					.Include(t => t.Tipo)
+					.Include(u => u.Uso)
+					.Where(e => e.Duenio.Email == usuario)
+					.Single(e => e.Id == id));
 			}
 			catch (Exception ex)
 			{
@@ -49,24 +59,88 @@ namespace Inmobiliaria_.Net_Core.Api
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Post([FromBody] Inmueble entidad)
+		public async Task<IActionResult> Post([FromForm] Inmueble inmueble)
 		{
 			try
 			{
 				if (ModelState.IsValid)
 				{
-					entidad.PropietarioId = contexto.Propietarios.Single(e => e.Email == User.Identity.Name).Id;
-					contexto.Inmuebles.Add(entidad);
-					contexto.SaveChanges();
-					return CreatedAtAction(nameof(Get), new { id = entidad.Id }, entidad);
+					var propietarioId = contexto.Propietarios.Single(e => e.Email == User.Identity.Name).Id;
+					inmueble.PropietarioId = propietarioId; // Asegúrate de asignar el propietario al inmueble
+
+					contexto.Inmuebles.Add(inmueble);
+					await contexto.SaveChangesAsync(); // Guarda el inmueble primero
+
+					if (inmueble.Imagen != null)
+					{
+						var resizedImagePath = await ProcesarAvatarAsync(inmueble);
+						if (resizedImagePath == null)
+						{
+							return BadRequest("Formato de imagen no válido.");
+						}
+
+						inmueble.ImagenUrl = resizedImagePath;
+						//contexto.Inmuebles.Update(inmueble); // Actualiza el inmueble con la URL de la imagen
+						await contexto.SaveChangesAsync(); // Guarda los cambios
+					}
+
+					return CreatedAtAction(nameof(Get), new { id = inmueble.Id }, inmueble);
 				}
-				return BadRequest();
+
+				return BadRequest(ModelState);
 			}
 			catch (Exception ex)
 			{
-				return BadRequest(ex.Message);
+				return BadRequest(ex.InnerException?.Message ?? ex.Message);
 			}
 		}
+
+		private async Task<string?> ProcesarAvatarAsync(Inmueble inmueble)
+		{
+			string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".jfif", ".bmp" };
+			var extension = Path.GetExtension(inmueble.Imagen.FileName).ToLower();
+			if (!allowedExtensions.Contains(extension))
+			{
+				return "Formato de imagen no válido.";
+			}
+
+			var directoryPath = Path.Combine(environment.WebRootPath, "uploads");
+			if (!Directory.Exists(directoryPath))
+			{
+				Directory.CreateDirectory(directoryPath);
+			}
+
+			// Renombrar el archivo y obtener su nueva ruta
+			var inmuebleFileName = $"inmueble_{inmueble.Id}{extension}";
+			var inmuebleFilePath = Path.Combine(directoryPath, inmuebleFileName);
+
+			// Guardar el archivo en el directorio 'uploads'
+			using (var stream = new FileStream(inmuebleFilePath, FileMode.Create))
+			{
+				await inmueble.Imagen.CopyToAsync(stream);
+			}
+
+			// Redimensionar la imagen antes de guardarla
+			var resizedImagePath = ResizeImage(inmuebleFilePath);
+
+			// Reemplazar separadores de directorios incorrectos por correctos para URLs
+			var urlPath = resizedImagePath.Replace("\\", "/");
+
+			// Retorna la ruta de la imagen redimensionada con separadores correctos
+			return urlPath;
+		}
+
+		private string ResizeImage(string imagePath)
+		{
+			using (var image = Image.Load(imagePath))
+			{
+				image.Mutate(x => x.Resize(500, 500));
+				var resizedImagePath = Path.Combine(environment.WebRootPath, "uploads", Path.GetFileName(imagePath));
+				image.Save(resizedImagePath);
+				return Path.Combine("uploads", Path.GetFileName(imagePath)).Replace("\\", "/");
+			}
+		}
+
 
 		[HttpPut("cambiologico/{id}")]
 		public async Task<IActionResult> CambioLogico(int id)
