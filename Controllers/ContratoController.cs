@@ -23,6 +23,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 		{
 			try
 			{
+				var fechaActual = DateOnly.Parse(DateTime.Now.ToString("yyyy-MM-dd"));
 				var usuario = User.Identity.Name;
 				var contratos = await contexto.Contratos
 					.Include(c => c.Inmueble)
@@ -32,7 +33,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 					.Include(c => c.Inmueble)
 						.ThenInclude(i => i.Tipo)
 					.Include(i => i.Inquilino)
-					.Where(c => c.Inmueble.Duenio.Email == usuario)
+					.Where(c => c.Inmueble.Duenio.Email == usuario && (c.FechaInicio <= fechaActual && c.FechaFin >= fechaActual))
 					.ToListAsync();
 				return Ok(contratos);
 			}
