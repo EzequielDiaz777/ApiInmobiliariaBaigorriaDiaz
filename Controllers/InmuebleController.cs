@@ -111,7 +111,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 
 			// Renombrar el archivo y obtener su nueva ruta
-			var inmuebleFileName = $"inmueble_{inmueble.Id}{extension}";
+			var inmuebleFileName = $"inmueble_{inmueble.PropietarioId}_{inmueble.Id}{extension}";
 			var inmuebleFilePath = Path.Combine(directoryPath, inmuebleFileName);
 
 			// Guardar el archivo en el directorio 'uploads'
@@ -141,7 +141,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-
 		[HttpPut("cambiologico/{id}")]
 		public async Task<IActionResult> CambioLogico(int id)
 		{
@@ -151,6 +150,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 				var entidad = contexto.Inmuebles.Include(e => e.Duenio).FirstOrDefault(e => e.Id == id && e.Duenio.Email == usuario);
 				if (entidad != null)
 				{
+					Console.WriteLine(entidad.Estado);
 					if(entidad.Estado){
 						entidad.Estado = false;
 					} else {

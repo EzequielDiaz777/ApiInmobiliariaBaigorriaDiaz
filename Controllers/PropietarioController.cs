@@ -27,7 +27,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			this.contexto = contexto;
 			this.config = config;
 		}
-		
+
 		[HttpGet]
 		public async Task<ActionResult<Propietario>> Get()
 		{
@@ -255,5 +255,62 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
+		[HttpPut("cambiarviejacontraseña")]
+		public async Task<IActionResult> CambiarPasswordPorInput([FromForm] ChangeView changeView)
+		{
+			try
+			{
+				if (ModelState.IsValid)
+				{
+					var usuario = User.Identity.Name;
+					var propietario = await contexto.Propietarios.AsNoTracking().FirstOrDefaultAsync(x => x.Email == usuario);
+					if (propietario == null)
+					{
+						return NotFound("Propietario no encontrado");
+					}
+					string hashedVieja = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+							password: changeView.ClaveVieja,
+							salt: Encoding.ASCII.GetBytes(config["Salt"]),
+							prf: KeyDerivationPrf.HMACSHA1,
+							iterationCount: 1000,
+							numBytesRequested: 256 / 8));
+
+					if (propietario.Password != hashedVieja)
+					{
+						return BadRequest("Clave incorrecta");
+					}
+					string hashedNueva = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+						password: changeView.ClaveNueva,
+						salt: Encoding.ASCII.GetBytes(config["Salt"]),
+						prf: KeyDerivationPrf.HMACSHA1,
+						iterationCount: 1000,
+						numBytesRequested: 256 / 8));
+					string hashedRepetir = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+					password: changeView.RepetirClaveNueva,
+					salt: Encoding.ASCII.GetBytes(config["Salt"]),
+					prf: KeyDerivationPrf.HMACSHA1,
+					iterationCount: 1000,
+					numBytesRequested: 256 / 8));
+					if (hashedNueva != hashedRepetir)
+					{
+						return BadRequest("La clave nueva no coincide");
+					}
+					else
+					{
+						propietario.Password = hashedNueva;
+						contexto.Propietarios.Update(propietario);
+						await contexto.SaveChangesAsync();
+						return Ok("Contraseña cambiada con exito");
+					}
+				} else {
+					return BadRequest("Modelo inválido");
+				}
+			}
+			catch (Exception ex)
+			{
+				// Agregar más detalles del error en el registro para depuración
+				return BadRequest($"Error: {ex.Message}");
+			}
+		}
 	}
 }
