@@ -220,30 +220,32 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			{
 				if (ModelState.IsValid)
 				{
-					var propietario = await contexto.Propietarios.AsNoTracking().FirstOrDefaultAsync(x => x.Email == entidad.Email);
+					var propietario = await contexto.Propietarios.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entidad.Id);
 					if (propietario == null)
 					{
 						return NotFound("Propietario no encontrado");
 					}
-
-					entidad.Id = propietario.Id;
-					if (string.IsNullOrEmpty(entidad.Password))
-					{
-						entidad.Password = propietario.Password;
-					}
-					else
-					{
-						string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-							password: entidad.Password,
-							salt: Encoding.ASCII.GetBytes(config["Salt"]),
-							prf: KeyDerivationPrf.HMACSHA1,
-							iterationCount: 1000,
-							numBytesRequested: 256 / 8));
-						entidad.Password = hashed;
-					}
+					entidad.Password = propietario.Password;
+					Console.WriteLine("Contraseña: " + entidad.Password);
 					contexto.Propietarios.Update(entidad);
 					await contexto.SaveChangesAsync();
-					return Ok(entidad);
+					var key = new SymmetricSecurityKey(
+						Encoding.ASCII.GetBytes(config["TokenAuthentication:SecretKey"]));
+					var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+					var claims = new List<Claim>
+					{
+						new Claim(ClaimTypes.Name, entidad.Email),
+						new Claim("FullName", entidad.Nombre + " " + entidad.Apellido),
+						new Claim(ClaimTypes.Role, "Administrador"),
+					};
+					var token = new JwtSecurityToken(
+						issuer: config["TokenAuthentication:Issuer"],
+						audience: config["TokenAuthentication:Audience"],
+						claims: claims,
+						expires: DateTime.Now.AddHours(60000),
+						signingCredentials: credenciales
+					);
+					return Ok(new JwtSecurityTokenHandler().WriteToken(token));
 				}
 
 				return BadRequest("Modelo inválido");
