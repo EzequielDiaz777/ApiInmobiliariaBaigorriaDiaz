@@ -42,32 +42,5 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-
-		[HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
-        {
-            try
-            {
-				var fechaActual = DateOnly.Parse(DateTime.Now.ToString("yyyy-MM-dd"));
-                var usuario = User.Identity.Name;
-                var contrato = await contexto.Contratos
-                    .Include(c => c.Inmueble)
-                        .ThenInclude(i => i.Duenio)
-					.Include(c => c.Inquilino).
-					Where(c => c.FechaInicio <= fechaActual && c.FechaFin >= fechaActual)
-                    .FirstOrDefaultAsync(c => c.InmuebleId == id && c.Inmueble.Duenio.Email == usuario);
-
-                if (contrato == null)
-                {
-                    return NotFound("No se encontró el contrato especificado.");
-                }
-
-                return Ok(contrato);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-		}
 	}
 }

@@ -39,25 +39,6 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		[HttpGet("{id}")]
-		public async Task<IActionResult> Get(int id)
-		{
-			try
-			{
-				var usuario = User.Identity.Name;
-				return Ok(contexto.Inmuebles
-					.Include(e => e.Duenio)
-					.Include(t => t.Tipo)
-					.Include(u => u.Uso)
-					.Where(e => e.Duenio.Email == usuario)
-					.Single(e => e.Id == id));
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}
-
 		[HttpPost]
 		public async Task<IActionResult> Post([FromForm] Inmueble inmueble)
 		{
@@ -73,7 +54,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 
 					if (inmueble.Imagen != null)
 					{
-						var resizedImagePath = await ProcesarAvatarAsync(inmueble);
+						var resizedImagePath = await ProcesarImagenAsync(inmueble);
 						if (resizedImagePath == null)
 						{
 							return BadRequest("Formato de imagen no válido.");
@@ -95,7 +76,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 			}
 		}
 
-		private async Task<string?> ProcesarAvatarAsync(Inmueble inmueble)
+		private async Task<string?> ProcesarImagenAsync(Inmueble inmueble)
 		{
 			string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".jfif", ".bmp" };
 			var extension = Path.GetExtension(inmueble.Imagen.FileName).ToLower();

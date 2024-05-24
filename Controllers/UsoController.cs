@@ -31,19 +31,5 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-
-		[HttpGet("{id}")]
-		public async Task<ActionResult<Uso>> Get(int id)
-		{
-			try
-			{
-				var entidad = await contexto.Usodeinmueble.SingleOrDefaultAsync(u => u.Id == id);
-				return entidad != null ? Ok(entidad) : NotFound();
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}
 	}
 }
