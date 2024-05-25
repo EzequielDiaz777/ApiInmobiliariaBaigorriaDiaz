@@ -115,7 +115,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 		{
 			using (var image = Image.Load(imagePath))
 			{
-				image.Mutate(x => x.Resize(500, 500));
+				image.Mutate(x => x.Resize(600, 350));
 				var resizedImagePath = Path.Combine(environment.WebRootPath, "uploads", Path.GetFileName(imagePath));
 				image.Save(resizedImagePath);
 				return Path.Combine("uploads", Path.GetFileName(imagePath)).Replace("\\", "/");
