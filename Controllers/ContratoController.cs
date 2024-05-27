@@ -34,6 +34,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
 						.ThenInclude(i => i.Tipo)
 					.Include(i => i.Inquilino)
 					.Where(c => c.Inmueble.Duenio.Email == usuario && (c.FechaInicio <= fechaActual && c.FechaFin >= fechaActual))
+					.OrderByDescending(c => c.FechaInicio)
 					.ToListAsync();
 				return Ok(contratos);
 			}

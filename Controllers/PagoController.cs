@@ -26,6 +26,7 @@ namespace InmobiliariaBaigorriaDiaz.Controllers
                 var usuario = User.Identity.Name;
                 var pagos = await contexto.Pagos
                     .Where(p => p.ContratoId == id)
+                    .OrderByDescending(p => p.Fecha)
                     .ToListAsync();
                 return Ok(pagos);
             }
