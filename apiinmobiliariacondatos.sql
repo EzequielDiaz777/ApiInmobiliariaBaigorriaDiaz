@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-05-2024 a las 16:21:26
+-- Tiempo de generación: 03-06-2024 a las 01:38:23
 -- Versión del servidor: 10.4.18-MariaDB
 -- Versión de PHP: 8.0.5
 
@@ -76,7 +76,9 @@ INSERT INTO `inmuebles` (`Id`, `PropietarioId`, `Direccion`, `Ambientes`, `TipoI
 (1, 6, 'Barrio Cerro de la Cruz Manzana 265 Casa 10', 3, 1, 1, '59000.00', 'uploads/inmueble_6_1.jpg', 1),
 (2, 6, 'Carranza 1129', 3, 1, 1, '47000.00', 'uploads/inmueble_6_2.jpg', 1),
 (3, 6, 'San Luis 1234', 1, 4, 2, '120000.00', 'uploads/inmueble_6_3.jpg', 1),
-(4, 6, 'Presidente Perón 4900', 7, 3, 2, '375000.92', 'uploads/inmueble_6_4.jpg', 0);
+(4, 6, 'Presidente Perón 4900', 7, 3, 2, '375000.92', 'uploads/inmueble_6_4.jpg', 0),
+(5, 1, 'San Luis 123', 3, 2, 1, '15000.00', 'uploads/inmueble_1_5.jpg', 1),
+(6, 6, 'San Luis 123', 2, 2, 1, '20000.00', 'uploads/inmueble_6_6.jpg', 0);
 
 -- --------------------------------------------------------
 
@@ -229,10 +231,10 @@ CREATE TABLE `propietarios` (
 --
 
 INSERT INTO `propietarios` (`Id`, `DNI`, `Apellido`, `Nombre`, `Telefono`, `Email`, `Password`) VALUES
-(1, '12345678', 'Luzza', 'Mariano', '121221224', 'mluzza@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20='),
-(2, '27013989', 'Baigorria', 'Monica Patricia', '2657123455', 'patobaigorria@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20='),
-(6, '34229421', 'Orsomarso', 'Ezequiel', '1132185230', 'diazezequiel777@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20='),
-(7, '37716731', 'Cruceño', 'Federico', '2657312733', 'a', '3NhEe7xWmOI/rcoD1E87QOXvp/dxtXzdcKYcAKt41tM=');
+(1, '12345678', 'Luzza', 'Mariano', '121221234', 'mluzza@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20='),
+(2, '12345676', 'Perez', 'Monica Patricia', '2657123456', 'patobaigorria@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20='),
+(6, '12345675', 'Diaz', 'Ezequiel', '1187654321', 'diazezequiel777@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20='),
+(7, '12345674', 'Menendez', 'Federico', '2657654321', 'juan@gmail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20=');
 
 -- --------------------------------------------------------
 
@@ -340,7 +342,7 @@ ALTER TABLE `contratos`
 -- AUTO_INCREMENT de la tabla `inmuebles`
 --
 ALTER TABLE `inmuebles`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `inquilinos`
